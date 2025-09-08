@@ -13,6 +13,7 @@
 2. **Install dependencies**
    ```bash
    pnpm install
+   pnpm approve-builds
    # or
    npm install
    ```
