@@ -200,15 +200,6 @@ npx shadcn@latest add [component-name]
 npx shadcn@latest add dialog
 ```
 
-## Environment Variables
-
-Create a `.env.local` file for local development:
-
-```env
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-# Add other environment variables as needed
-```
-
 # 📊 File Purposes
 
 ## Core Application Files
