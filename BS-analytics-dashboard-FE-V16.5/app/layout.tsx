@@ -41,12 +41,3 @@ export default function RootLayout({
     </html>
   )
 }
-
-function AnalyticsWrapper() {
-  try {
-    const { Analytics } = require("@vercel/analytics/next")
-    return <Analytics />
-  } catch {
-    return null
-  }
-}

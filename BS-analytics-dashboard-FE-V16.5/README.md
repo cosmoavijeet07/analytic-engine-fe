@@ -48,7 +48,6 @@ analytics-dashboard/
 │   ├── layout.tsx                # Root layout with providers
 │   ├── page.tsx                  # Home page (redirects to login)
 │   ├── loading.tsx               # Global loading component
-│   └── globals.css               # Global styles and CSS variables
 ├── components/                   # React components
 │   ├── ui/                       # shadcn/ui component library (40+ components)
 │   │   ├── button.tsx            # Button component with variants
@@ -109,13 +108,9 @@ analytics-dashboard/
 - **React Hook Form** - Performant forms with easy validation
 - **Zod** - TypeScript-first schema validation
 
-## Data Visualization
-- **Recharts** - Composable charting library for React
-
 ## Development Tools
 - **ESLint** - Code linting and formatting
 - **PostCSS** - CSS processing
-- **Vercel Analytics** - Performance monitoring
 
 # 🎨 Design System
 
