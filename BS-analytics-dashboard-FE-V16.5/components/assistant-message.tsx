@@ -1,7 +1,18 @@
 "use client"
 
 import { useState } from "react"
-import { ChevronDown, TrendingUp, Copy, Check, FileText, Brain } from "lucide-react"
+import {
+  ChevronDown,
+  TrendingUp,
+  Copy,
+  Check,
+  FileText,
+  Brain,
+  Download,
+  Shield,
+  ShieldCheck,
+  ShieldAlert,
+} from "lucide-react"
 // import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip"
 import type { Message } from "../types"
 
@@ -15,6 +26,53 @@ interface AssistantMessageProps {
 export function AssistantMessage({ message, processingTime, reportFormat, crossValidation }: AssistantMessageProps) {
   const [assistantCollapsed, setAssistantCollapsed] = useState(true)
   const [copied, setCopied] = useState(false)
+
+    const getVerificationStatus = () => {
+    const statuses = ["verified", "partial", "failed"]
+    const randomStatus = statuses[Math.floor(Math.random() * statuses.length)]
+    return randomStatus
+  }
+
+  const verificationStatus = getVerificationStatus()
+
+  const getVerificationBadge = () => {
+    switch (verificationStatus) {
+      case "verified":
+        return {
+          icon: <ShieldCheck className="h-3 w-3" />,
+          text: "Verified",
+          bgColor: "bg-green-100 dark:bg-green-900/30",
+          textColor: "text-green-700 dark:text-green-300",
+          borderColor: "border-green-200 dark:border-green-800",
+        }
+      case "partial":
+        return {
+          icon: <ShieldAlert className="h-3 w-3" />,
+          text: "Partially Verified",
+          bgColor: "bg-yellow-100 dark:bg-yellow-900/30",
+          textColor: "text-yellow-700 dark:text-yellow-300",
+          borderColor: "border-yellow-200 dark:border-yellow-800",
+        }
+      case "failed":
+        return {
+          icon: <Shield className="h-3 w-3" />,
+          text: "Failed",
+          bgColor: "bg-red-100 dark:bg-red-900/30",
+          textColor: "text-red-700 dark:text-red-300",
+          borderColor: "border-red-200 dark:border-red-800",
+        }
+      default:
+        return {
+          icon: <Shield className="h-3 w-3" />,
+          text: "Verified",
+          bgColor: "bg-green-100 dark:bg-green-900/30",
+          textColor: "text-green-700 dark:text-green-300",
+          borderColor: "border-green-200 dark:border-green-800",
+        }
+    }
+  }
+
+  const badge = getVerificationBadge()
 
   const getTextContent = () => {
     return `BLUE SHERPA Analytics Engine
@@ -50,6 +108,11 @@ Analysis Strategy Summary:
     console.log("PDF export requested - feature coming soon")
   }
 
+  
+  const handleDownloadLog = () => {
+    console.log("Download log requested - feature coming soon")
+  }
+
   return (
     <div className="flex justify-start mb-4">
       <div className="max-w-4xl w-full">
@@ -62,6 +125,13 @@ Analysis Strategy Summary:
               <div className="font-semibold text-foreground">BLUE SHERPA</div>
               <div className="text-sm text-muted-foreground">Analytics Engine</div>
             </div>
+            <div
+              className={`ml-auto mr-2 px-2 py-1 rounded-full border text-xs font-medium flex items-center gap-1 ${badge.bgColor} ${badge.textColor} ${badge.borderColor}`}
+            >
+              {badge.icon}
+              {badge.text}
+            </div>
+            {/* <div className="text-xs text-muted-foreground"></div> */}
             <div className="ml-auto text-xs text-muted-foreground">
               {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
             </div>
@@ -148,6 +218,12 @@ Analysis Strategy Summary:
               >
                 <FileText className="h-3.5 w-3.5 text-muted-foreground" />
               </button>
+                        <button
+            onClick={handleDownloadLog}
+            className="p-1.5 rounded-md hover:bg-accent transition-colors opacity-60 hover:opacity-100"
+          >
+            <Download className="h-3.5 w-3.5 text-muted-foreground" />
+          </button>
         </div>
       </div>
     </div>

@@ -1,9 +1,10 @@
 "use client"
-import { Clock, Database, TrendingUp, Code, FileText } from "lucide-react"
+import { Clock, Database, TrendingUp, Code, FileText, Square } from "lucide-react"
 import type { ProcessingStage } from "../types"
 
 interface ProcessingMessageProps {
   processingStages: ProcessingStage[]
+  onForceStop?: () => void
 }
 
 const iconMap = {
@@ -13,7 +14,7 @@ const iconMap = {
   FileText,
 }
 
-export function ProcessingMessage({ processingStages }: ProcessingMessageProps) {
+export function ProcessingMessage({ processingStages, onForceStop }: ProcessingMessageProps) {
   const calculateMainProgress = () => {
     const totalStages = processingStages.length
     if (totalStages === 0) return 0
@@ -29,10 +30,12 @@ export function ProcessingMessage({ processingStages }: ProcessingMessageProps) 
   }
 
   const mainProgress = calculateMainProgress()
+  const isProcessing = processingStages.some((stage) => stage.status === "processing")
 
   return (
     <div className="flex justify-start">
-      <div className="
+      <div
+        className="
   bg-gradient-to-br 
   from-[#040d36] 
   to-primary 
@@ -41,22 +44,28 @@ export function ProcessingMessage({ processingStages }: ProcessingMessageProps) 
   p-6 
   max-w-2xl 
   w-full
-">
+"
+      >
         <div className="flex items-center gap-3 mb-4">
           <div className="relative">
-              {/* /* <div className="w-8 h-8 border-4 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin"></div>
-            <div
-              className="absolute inset-0 w-8 h-8 border-4 border-transparent border-r-primary-foreground/60 rounded-full animate-spin"
-              style={{ animationDirection: "reverse", animationDuration: "1.5s" }}
-            ></div> */ }
             <img src="/Spinner.gif" alt="Processing" className="w-13 h-13" />
           </div>
-          <div>
+          <div className="flex-1">
             <div className="font-semibold">Cognitive Core Processing</div>
             <div className="text-sm text-primary-foreground/80">Advanced AI analysis in progress...</div>
           </div>
+          {isProcessing && onForceStop && (
+            <button
+              onClick={onForceStop}
+              className="flex items-center gap-2 px-3 py-1.5 bg-red-500/20 hover:bg-red-500/30 text-red-200 hover:text-red-100 rounded-md transition-colors duration-200 text-sm font-medium"
+              title="Force Stop Processing"
+            >
+              <Square className="h-3 w-3" />
+              Force Stop
+            </button>
+          )}
         </div>
-        
+
         <div className="mb-6">
           <div className="w-full bg-primary-foreground/20 rounded-full h-2 mb-4">
             <div
@@ -67,7 +76,7 @@ export function ProcessingMessage({ processingStages }: ProcessingMessageProps) 
             ></div>
           </div>
         </div>
-        
+
         <div className="grid grid-cols-2 gap-4">
           {processingStages.map((stage) => {
             const IconComponent = iconMap[stage.icon as keyof typeof iconMap] || Database
@@ -98,7 +107,7 @@ export function ProcessingMessage({ processingStages }: ProcessingMessageProps) 
             )
           })}
         </div>
-        
+
         <div className="flex items-center justify-center gap-2 text-sm mt-4">
           <Clock className="h-4 w-4" />
           <span>Estimated completion: 2-3 minutes</span>

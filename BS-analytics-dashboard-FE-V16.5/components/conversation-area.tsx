@@ -22,6 +22,10 @@ interface ConversationAreaProps {
   onSendMessage: () => void
   onStartAnalysis: () => void
   onContinueResolving: () => void
+  onForceStop?: () => void
+  onEndConversation: () => void
+  isConversationEnded: boolean
+  hasMessages: boolean
   processingTime: number
   reportFormat: string
   crossValidation: string
@@ -43,6 +47,10 @@ export function ConversationArea({
   onSendMessage,
   onStartAnalysis,
   onContinueResolving,
+  onForceStop,
+  onEndConversation,
+  isConversationEnded,
+  hasMessages,
   processingTime,
   reportFormat,
   crossValidation,
@@ -80,21 +88,32 @@ export function ConversationArea({
               clickedButton={clickedButton}
               onStartAnalysis={onStartAnalysis}
               onContinueResolving={onContinueResolving}
+              onForceStop={onForceStop}
               processingTime={processingTime}
               reportFormat={reportFormat}
               crossValidation={crossValidation}
             />
           </div>
 
-          <MessageInput
-            currentMessage={currentMessage}
-            setCurrentMessage={setCurrentMessage}
-            onSendMessage={onSendMessage}
-            conversationStep={conversationStep}
-            isProcessing={isProcessing}
-            awaitingUserResponse={awaitingUserResponse}
-            contextConfirmationActive={contextConfirmationActive}
-          />
+           {!isConversationEnded ? (
+            <MessageInput
+              currentMessage={currentMessage}
+              setCurrentMessage={setCurrentMessage}
+              onSendMessage={onSendMessage}
+              conversationStep={conversationStep}
+              isProcessing={isProcessing}
+              awaitingUserResponse={awaitingUserResponse}
+              contextConfirmationActive={contextConfirmationActive}
+              onEndConversation={onEndConversation}
+              hasMessages={hasMessages}
+            />
+          ) : (
+            <div className="border-t border-border bg-background/50 backdrop-blur-sm p-4">
+              <div className="flex items-center justify-center">
+                <span className="text-sm text-muted-foreground font-medium">Conversation ended</span>
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>

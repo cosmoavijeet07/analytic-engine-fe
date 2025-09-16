@@ -4,14 +4,17 @@ import { LeftPanel } from "./left-panel"
 import { RightPanel } from "./right-panel"
 import { MainContent } from "./main-content"
 import { DashboardHeader } from "./header"
-import type { AnalyticsSession, Message, ProcessingStage } from "../types/index"
-import { CONVERSATION_STEPS, MESSAGE_TYPES, PROCESSING_STATUSES } from "../types/index"
+import type { AnalyticsSession, Message, ProcessingStage } from "@/types/index"
+import { CONVERSATION_STEPS, MESSAGE_TYPES, PROCESSING_STATUSES } from "@/types/index"
 
 const INITIAL_PROCESSING_STAGES: ProcessingStage[] = [
-  { id: "database", name: "Database Analysis", icon: "Database", status: "queued", progress: 0 },
-  { id: "pattern", name: "Pattern Recognition", icon: "TrendingUp", status: "queued", progress: 0 },
-  { id: "code", name: "Code Generation", icon: "Code", status: "queued", progress: 0 },
-  { id: "report", name: "Report Synthesis", icon: "FileText", status: "queued", progress: 0 },
+  { id: "planning", name: "Planning", icon: "Database", status: "queued", progress: 0 },
+  { id: "coding", name: "Coding", icon: "Code", status: "queued", progress: 0 },
+  { id: "verification", name: "In-conversation Verification", icon: "TrendingUp", status: "queued", progress: 0 },
+  { id: "execution", name: "Execution", icon: "FileText", status: "queued", progress: 0 },
+  { id: "fixing", name: "Code-fixing", icon: "Code", status: "queued", progress: 0 },
+  { id: "optimization", name: "Plan Optimization", icon: "TrendingUp", status: "queued", progress: 0 },
+  { id: "summarization", name: "Summarization", icon: "FileText", status: "queued", progress: 0 },
 ]
 
 const AMBIGUITY_QUESTIONS = [
@@ -36,6 +39,7 @@ interface ConversationState {
   clickedButton: string | null
   processingStages: ProcessingStage[]
   isProcessing: boolean
+  isConversationEnded: boolean
 }
 
 // Create fresh conversation state
@@ -49,6 +53,7 @@ const createFreshConversationState = (): ConversationState => ({
   clickedButton: null,
   processingStages: INITIAL_PROCESSING_STAGES.map(stage => ({ ...stage })),
   isProcessing: false,
+  isConversationEnded: false,
 })
 
 export default function AnalyticsDashboard() {
@@ -203,6 +208,66 @@ export default function AnalyticsDashboard() {
       setUiState((prev) => ({ ...prev, controlsDisabled: false }))
     }
   }, [currentConversationState.step])
+
+   const handleForceStop = useCallback(() => {
+    if (!currentSessionId) return
+
+    console.log("[v0] Force Stop clicked - stopping processing")
+
+    // Stop processing and reset to completed state
+    updateConversationState(currentSessionId, {
+      isProcessing: false,
+      step: CONVERSATION_STEPS.COMPLETED,
+    })
+
+    // Reset all processing stages to completed
+    const resetStages = currentConversationState.processingStages.map((stage) => ({
+      ...stage,
+      status: PROCESSING_STATUSES.COMPLETED,
+      progress: 100,
+    }))
+
+    updateConversationState(currentSessionId, {
+      processingStages: resetStages,
+    })
+
+    setUiState((prev) => ({ ...prev, controlsDisabled: false }))
+
+    if (currentSession) {
+      const forceStoppedMessage: Message = {
+        id: Date.now().toString(),
+        type: MESSAGE_TYPES.ASSISTANT,
+        content: `Analysis Stopped - Processing was manually interrupted`,
+        timestamp: new Date(),
+        status: "completed",
+      }
+
+      updateSession(currentSessionId, {
+        messages: [...currentSession.messages, forceStoppedMessage],
+        currentStep: CONVERSATION_STEPS.COMPLETED,
+      })
+    }
+  }, [
+    currentSessionId,
+    currentConversationState.processingStages,
+    currentSession,
+    updateConversationState,
+    updateSession,
+  ])
+  const handleEndConversation = useCallback(() => {
+    if (!currentSessionId) return
+
+    console.log("[v0] End Conversation clicked - ending conversation")
+
+    // Mark conversation as ended
+    updateConversationState(currentSessionId, {
+      isConversationEnded: true,
+    })
+  }, [currentSessionId, updateConversationState])
+
+  const hasMessages = useMemo(() => {
+    return currentSession && currentSession.messages.length > 0
+  }, [currentSession])
 
   return (
     <div className="flex h-screen bg-background text-foreground">
@@ -450,6 +515,10 @@ export default function AnalyticsDashboard() {
               }
             }, 1000)
           }}
+          onForceStop={handleForceStop}
+          onEndConversation={handleEndConversation}
+          isConversationEnded={currentConversationState.isConversationEnded}
+          hasMessages={hasMessages}
           processingTime={controlSettings.processingTime}
           reportFormat={controlSettings.reportingStyle}
           crossValidation={controlSettings.crossValidation}

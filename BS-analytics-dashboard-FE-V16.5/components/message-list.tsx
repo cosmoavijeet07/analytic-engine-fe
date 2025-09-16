@@ -19,6 +19,7 @@ interface MessageListProps {
   clickedButton: string | null
   onStartAnalysis: () => void
   onContinueResolving: () => void
+  onForceStop?: () => void
   processingTime: number
   reportFormat: string
   crossValidation: string
@@ -37,6 +38,7 @@ export function MessageList({
   clickedButton,
   onStartAnalysis,
   onContinueResolving,
+  onForceStop,
   processingTime,
   reportFormat,
   crossValidation,
@@ -82,7 +84,9 @@ export function MessageList({
         ))}
 
       {/* Processing Display */}
-      {isProcessing && conversationStep === "processing" && <ProcessingMessage processingStages={processingStages} />}
+      {isProcessing && conversationStep === "processing" && (
+        <ProcessingMessage processingStages={processingStages} onForceStop={onForceStop} />
+      )}
     </div>
   )
 }

@@ -32,6 +32,10 @@ interface MainContentProps {
   onSendMessage: () => void
   onStartAnalysis: () => void
   onContinueResolving: () => void
+  onForceStop?: () => void
+  onEndConversation: () => void
+  isConversationEnded: boolean
+  hasMessages: boolean
   processingTime: number
   reportFormat: string
   crossValidation: string
@@ -61,6 +65,10 @@ export function MainContent({
   onSendMessage,
   onStartAnalysis,
   onContinueResolving,
+  onForceStop,
+  onEndConversation,
+  isConversationEnded,
+  hasMessages,
   processingTime,
   reportFormat,
   crossValidation,
@@ -94,6 +102,10 @@ export function MainContent({
           onSendMessage={onSendMessage}
           onStartAnalysis={onStartAnalysis}
           onContinueResolving={onContinueResolving}
+          onForceStop={onForceStop}
+          onEndConversation={onEndConversation}
+          isConversationEnded={isConversationEnded}
+          hasMessages={hasMessages}
           processingTime={processingTime}
           reportFormat={reportFormat}
           crossValidation={crossValidation}

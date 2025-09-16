@@ -1,13 +1,17 @@
 "use client"
 
 import { useState } from "react"
-import { User, Copy, Check } from "lucide-react"
+import { User, Copy, Check, Edit3} from "lucide-react"
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "./ui/tooltip"
 import type { Message } from "../types"
 
 interface UserMessageProps {
   message: Message
 }
+
+const handleEditPrompt = () => {
+    console.log("Edit prompt requested - feature coming soon")
+  }
 
 export function UserMessage({ message }: UserMessageProps) {
   const [copied, setCopied] = useState(false)
@@ -41,7 +45,13 @@ export function UserMessage({ message }: UserMessageProps) {
           <p className="text-sm leading-relaxed">{message.content}</p>
         </div>
 
-        <div className="flex justify-end mt-2">
+        <div className="flex justify-end mt-2 gap-1">
+           <button
+                  onClick={handleEditPrompt}
+                  className="p-1.5 rounded-md hover:bg-accent transition-colors opacity-60 hover:opacity-100"
+                >
+                  <Edit3 className="h-3.5 w-3.5 text-muted-foreground" />
+                </button>
           <Tooltip>
             <TooltipTrigger asChild>
               <button

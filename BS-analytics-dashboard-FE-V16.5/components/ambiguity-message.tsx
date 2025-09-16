@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { AlertTriangle, ChevronDown, CheckCircle } from "lucide-react"
-import type { Message } from "../types"
+import type { Message } from "@/types/analytics.ts"
 
 interface AmbiguityMessageProps {
   message: Message
@@ -45,13 +45,18 @@ export function AmbiguityMessage({
           <div className="flex items-center gap-2">
             <AlertTriangle className="h-4 w-4 text-orange-600 dark:text-orange-400" />
             <span className="font-medium text-orange-900 dark:text-orange-100">Ambiguity Resolver</span>
-          </div>
-          <div className="flex items-center gap-2">
             {message.status === "completed" && (
-              <span className="text-xs px-2 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-200 rounded-full">
-                Context confirmed
+              <span className="text-xs px-2 py-1 bg-emerald-100 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300 rounded-full border border-emerald-200 dark:border-emerald-800/30 font-medium">
+                Resolved Context
               </span>
             )}
+            {message.status === "context_confirmation" && (
+              <span className="text-xs px-2 py-1 bg-emerald-100 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300 rounded-full border border-emerald-200 dark:border-emerald-800/30 font-medium">
+                Resolved Context
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
             {message.status === "active" && message.answeredQuestions !== undefined && (
               <span className="text-xs px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-200 rounded-full">
                 {message.answeredQuestions} answered

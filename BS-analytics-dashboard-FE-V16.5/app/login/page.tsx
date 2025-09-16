@@ -77,7 +77,13 @@ export default function LoginPage() {
                 <Brain className="h-6 w-6 text-primary-foreground" />
               </div>
             </div>
-            <h1 className="text-2xl font-semibold tracking-tight text-balance">BLUE SHERPA</h1>
+            <div className="flex justify-center">
+              <img
+                src="/blue-sherpa-logo.png"
+                alt="Blue Sherpa"
+                className="h-25 w-auto object-contain max-w-[400px]"
+              />
+            </div>
             <p className="text-sm text-muted-foreground">Analytics Engine</p>
           </div>
           <form onSubmit={handleLogin} className="space-y-5">
