@@ -41,3 +41,7 @@ export default function RootLayout({
     </html>
   )
 }
+
+function AnalyticsWrapper() {
+    return null
+  }
