@@ -4,8 +4,8 @@ import { LeftPanel } from "./left-panel"
 import { RightPanel } from "./right-panel"
 import { MainContent } from "./main-content"
 import { DashboardHeader } from "./header"
-import type { AnalyticsSession, Message, ProcessingStage } from "@/types/index"
-import { CONVERSATION_STEPS, MESSAGE_TYPES, PROCESSING_STATUSES } from "@/types/index"
+import type { AnalyticsSession, Message, ProcessingStage } from "@/types"
+import { CONVERSATION_STEPS, MESSAGE_TYPES, PROCESSING_STATUSES } from "@/types"
 
 const INITIAL_PROCESSING_STAGES: ProcessingStage[] = [
   { id: "planning", name: "Planning", icon: "Database", status: "queued", progress: 0 },

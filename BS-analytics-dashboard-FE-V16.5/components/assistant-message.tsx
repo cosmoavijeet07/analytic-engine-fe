@@ -14,7 +14,7 @@ import {
   ShieldAlert,
 } from "lucide-react"
 // import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip"
-import type { Message } from "../types"
+import type { Message } from "@/types"
 
 interface AssistantMessageProps {
   message: Message

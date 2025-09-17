@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { AlertTriangle, ChevronDown, CheckCircle } from "lucide-react"
-import type { Message } from "@/types/analytics.ts"
+import type { Message } from "@/types"
 
 interface AmbiguityMessageProps {
   message: Message

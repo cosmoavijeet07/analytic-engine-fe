@@ -5,6 +5,7 @@ import { AmbiguityMessage } from "./ambiguity-message"
 import { AssistantMessage } from "./assistant-message"
 import { ProcessingMessage } from "./processing-message"
 import type { Message, ProcessingStage } from "../types"
+import { ProcessingLogWindow } from "./processing-log-window"
 
 interface MessageListProps {
   messages: Message[]
@@ -51,7 +52,7 @@ export function MessageList({
         .map((message) => (
           <UserMessage key={`user-${message.id}`} message={message} />
         ))}
-
+      
       {/* System Messages */}
       {messages
         .filter((message) => message.type !== "user")
@@ -71,8 +72,28 @@ export function MessageList({
                 onContinueResolving={onContinueResolving}
               />
             )}
+          </div>
+        ))}
 
-            {message.type === "assistant" && conversationStep === "completed" && (
+      {/* Processing Display */}
+      {isProcessing && conversationStep === "processing" && (
+        <>
+          <ProcessingMessage processingStages={processingStages} onForceStop={onForceStop} />
+          <ProcessingLogWindow isProcessing={isProcessing} isVisible={conversationStep === "processing"} />
+        </>
+      )}
+
+      {/* Processing Log Window for completed conversation - MOVED BEFORE assistant message */}
+      {!isProcessing && conversationStep === "completed" && (
+        <ProcessingLogWindow isProcessing={false} isVisible={true} />
+      )}
+
+      {/* Assistant Messages - MOVED AFTER processing log window */}
+      {messages
+        .filter((message) => message.type === "assistant")
+        .map((message) => (
+          <div key={message.id}>
+            {conversationStep === "completed" && (
               <AssistantMessage
                 message={message}
                 processingTime={processingTime}
@@ -82,11 +103,6 @@ export function MessageList({
             )}
           </div>
         ))}
-
-      {/* Processing Display */}
-      {isProcessing && conversationStep === "processing" && (
-        <ProcessingMessage processingStages={processingStages} onForceStop={onForceStop} />
-      )}
     </div>
   )
 }
