@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run dev:*)",
+      "Bash(python:*)",
+      "Read(//c/Users/HP/OneDrive/Pictures/Screenshots/**)",
+      "Bash(envScriptsactivate.bat)",
+      "Bash(.env/Scripts/activate)",
+      "Bash(.env/Scripts/activate.bat)",
+      "Bash(.env/Scripts/python.exe:*)",
+      "Bash(where python)",
+      "Bash(dir)",
+      "Bash(.envScriptsactivate.bat)",
+      "Bash(.envScriptspython.exe app.py)",
+      "Bash(del clear_database.py)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
